@@ -1,1 +1,1 @@
-Zithara Integration
+Zithara Core

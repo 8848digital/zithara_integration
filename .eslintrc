@@ -21,7 +21,7 @@
 		"no-unused-vars": "off",
 		"no-console": ["warn"],
 		"no-extra-boolean-cast": ["off"],
-		"no-control-regex": ["off"],
+		"no-control-regex": ["off"]
 	},
 	"root": true,
 	"globals": {
@@ -43,6 +43,7 @@
 		"is_null": true,
 		"in_list": true,
 		"has_common": true,
+		"posthog": true,
 		"has_words": true,
 		"validate_email": true,
 		"open_web_template_values_editor": true,
@@ -95,7 +96,6 @@
 		"hljs": true,
 		"Awesomplete": true,
 		"Sortable": true,
-		"gemoji": true,
 		"Showdown": true,
 		"Taggle": true,
 		"Gantt": true,

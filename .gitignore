@@ -53,3 +53,7 @@ jspm_packages/
 
 # Aider AI Chat
 .aider*
+
+# Build output
+zithara_integration/public/dist/
+.codegraph/

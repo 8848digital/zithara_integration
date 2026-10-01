@@ -9,6 +9,7 @@ import frappe
 from frappe.utils import flt, get_datetime, get_system_timezone
 
 from zithara_integration.zithara_core.services.payments import invoice_transactions
+from zithara_integration.zithara_core.services.redemption_invoice import redemption_attributes
 from zithara_integration.zithara_core.services.value_format import (
 	money,
 	normalize_phone,
@@ -144,7 +145,7 @@ class OrderPayload:
 			"fulfillment_status": "",
 			"invoice_url": "",
 			"note": False,
-			"custom_attributes": {"pos_reference": invoice.name},
+			"custom_attributes": {"pos_reference": invoice.name, **redemption_attributes(invoice)},
 		}
 
 	def __created_at(self) -> str:

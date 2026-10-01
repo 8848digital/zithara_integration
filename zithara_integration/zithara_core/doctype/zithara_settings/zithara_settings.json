@@ -28,6 +28,8 @@
   "column_break_customer",
   "gender_field",
   "date_of_birth_field",
+  "loyalty_section",
+  "enable_loyalty_redemption",
   "credentials_tab",
   "email_import_section",
   "import_credentials_from_email",
@@ -202,6 +204,18 @@
    "label": "Date of Birth Field"
   },
   {
+   "fieldname": "loyalty_section",
+   "fieldtype": "Section Break",
+   "label": "Loyalty Points"
+  },
+  {
+   "fieldname": "enable_loyalty_redemption",
+   "fieldtype": "Check",
+   "label": "Enable Points Redemption",
+   "default": "0",
+   "description": "Show Zithara \u2192 Loyalty Points / Redeem Points on invoices and allow the loyalty APIs. Leave off if the client only uses Zithara as a CRM; paid sales are still sent either way."
+  },
+  {
    "fieldname": "credentials_tab",
    "fieldtype": "Tab Break",
    "label": "Store Credentials"
@@ -332,7 +346,7 @@
  ],
  "issingle": 1,
  "links": [],
- "modified": "2026-09-30 12:00:00.000000",
+ "modified": "2026-10-01 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "Zithara Core",
  "name": "Zithara Settings",

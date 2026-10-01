@@ -3,9 +3,13 @@
 # of this file, via any medium, is strictly prohibited without prior
 # written permission from 8848 Digital LLP.
 
-"""doc_events for Sales Invoice: send paid sales and returns to Zithara."""
+"""doc_events for Sales Invoice: send paid sales and returns to Zithara, guard redeemed points."""
 
 from zithara_integration.zithara_core.services.order_sync import OrderSync
+from zithara_integration.zithara_core.services.redemption_invoice import (
+	block_delete,
+	validate_redemption,
+)
 
 
 def on_submit(doc, method=None):
@@ -34,3 +38,31 @@ def on_cancel(doc, method=None):
 	        None
 	"""
 	OrderSync().on_invoice_cancel(doc)
+
+
+def validate(doc, method=None):
+	"""
+	Keep redeemed Zithara points (customer and discount) intact.
+
+	Parameters:
+	        doc (Document, required): The Sales Invoice being saved.
+	        method (str, optional): Hook event name passed by Frappe.
+
+	Returns:
+	        None
+	"""
+	validate_redemption(doc)
+
+
+def on_trash(doc, method=None):
+	"""
+	Refuse to delete a draft whose Zithara points are already redeemed.
+
+	Parameters:
+	        doc (Document, required): The Sales Invoice being deleted.
+	        method (str, optional): Hook event name passed by Frappe.
+
+	Returns:
+	        None
+	"""
+	block_delete(doc)

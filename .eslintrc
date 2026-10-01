@@ -25,6 +25,7 @@
 	},
 	"root": true,
 	"globals": {
+		"zithara_integration": true,
 		"frappe": true,
 		"Vue": true,
 		"SetVueGlobals": true,

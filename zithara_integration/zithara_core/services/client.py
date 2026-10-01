@@ -120,7 +120,27 @@ class ZitharaClient:
 		path = GET_ORDER_PATH.format(platform_order_id=quote(platform_order_id, safe=""))
 		return self.__request("GET", path)
 
-	def __request(self, method: str, path: str, payload: dict | None = None) -> dict | list:
+	def call(
+		self, method: str, path: str, payload: dict | None = None, retry: bool = True
+	) -> dict | list:
+		"""
+		Call any Zithara endpoint as this store (used by the loyalty calls).
+
+		Parameters:
+		        method (str, required): "GET" or "POST".
+		        path (str, required): Endpoint path, with its query string.
+		        payload (dict, optional): JSON body for POST.
+		        retry (bool, optional): Retry 5xx. False for calls that must never
+		                repeat, e.g. initiate-redemption (each call sends an SMS).
+
+		Returns:
+		        dict | list: Parsed success body.
+		"""
+		return self.__request(method, path, payload, retry)
+
+	def __request(
+		self, method: str, path: str, payload: dict | None = None, retry: bool = True
+	) -> dict | list:
 		"""
 		Call Zithara with the store's token. 5xx is retried; a 401 refreshes the
 		token once (it can expire before our cached expiry).
@@ -129,6 +149,7 @@ class ZitharaClient:
 		        method (str, required): "GET" or "POST".
 		        path (str, required): Endpoint path.
 		        payload (dict, optional): JSON body for POST.
+		        retry (bool, optional): Retry 5xx responses.
 
 		Returns:
 		        dict | list: Parsed success body.
@@ -147,7 +168,7 @@ class ZitharaClient:
 			if response.status_code == 401 and not token_refreshed:
 				token_refreshed = True
 				continue
-			if response.status_code in RETRY_STATUSES and attempt <= self.max_retries:
+			if retry and response.status_code in RETRY_STATUSES and attempt <= self.max_retries:
 				time.sleep(RETRY_DELAY_SECONDS)
 				continue
 			return parse_response(response)

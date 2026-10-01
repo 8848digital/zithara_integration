@@ -10,7 +10,11 @@ the replies Zithara returned on its dev sandbox.
 
 import frappe
 
+from zithara_integration.zithara_core.services.client_response import ZitharaError
+
 TOKEN = "test-mode-token"
+TEST_POINTS = 5000
+TEST_OTP = "123456"
 
 
 def reply(method: str, path: str, payload: dict | None = None) -> dict | list:
@@ -34,6 +38,8 @@ def reply(method: str, path: str, payload: dict | None = None) -> dict | list:
 			"message": "order created",
 			"orderId": f"TEST-{frappe.generate_hash(length=8)}",
 		}
+	if "/loyalty-points" in path or "redemption" in path:
+		return __loyalty_reply(path, payload)
 	if method == "GET" and "/order/" in path:
 		return [{"platform_order_id": path.rsplit("/", 1)[-1], "status": "paid", "points_credited": 0}]
 	return {"success": True}
@@ -53,3 +59,31 @@ def __cancel_reply() -> dict:
 		"deductedResult": {"success": True, "data": {"amount": 0}, "remainingPoints": 0},
 		"points_deducted": 0,
 	}
+
+
+def __loyalty_reply(path: str, payload: dict) -> dict:
+	"""
+	Fake loyalty replies: 5000 points, 1 point = 1 rupee, OTP is always 123456.
+
+	Parameters:
+	        path (str, required): Endpoint path.
+	        payload (dict, required): JSON body.
+
+	Returns:
+	        dict: Zithara-shaped loyalty reply.
+	"""
+	if "/loyalty-points" in path:
+		rule = {"points": 1, "amount": 1, "is_min_limit": False, "is_max_limit": False}
+		data = {
+			"points": TEST_POINTS,
+			"customer_id": "TEST",
+			"config": {"conversion": [{"redeem": rule}]},
+		}
+		return {"success": True, "status": 200, "data": data}
+	if "initiate" in path:
+		data = {"message": "OTP sent successfully", "sentTo": "test", "sessionId": "test-session"}
+		return {"success": True, "status": 200, "data": data}
+	if payload.get("otp") != TEST_OTP:
+		reply = {"success": False, "status": 400, "message": "Invalid OTP"}
+		raise ZitharaError(400, reply["message"], reply)
+	return {"success": True, "status": 200, "data": {"amount": payload.get("points")}}

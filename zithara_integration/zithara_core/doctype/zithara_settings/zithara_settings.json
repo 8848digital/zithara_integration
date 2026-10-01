@@ -1,0 +1,369 @@
+{
+ "actions": [],
+ "creation": "2026-09-30 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "connection_tab",
+  "enabled",
+  "environment",
+  "base_url",
+  "test_mode",
+  "column_break_conn",
+  "timeout_seconds",
+  "max_retries",
+  "max_sync_attempts",
+  "store_section",
+  "store_doctype",
+  "invoice_store_field",
+  "column_break_store",
+  "default_store",
+  "sync_section",
+  "sync_sales_invoice",
+  "sync_pos_invoice",
+  "column_break_sync",
+  "skip_customers",
+  "customer_section",
+  "phone_country_code",
+  "column_break_customer",
+  "gender_field",
+  "date_of_birth_field",
+  "loyalty_section",
+  "enable_loyalty_redemption",
+  "credentials_tab",
+  "email_import_section",
+  "import_credentials_from_email",
+  "credential_email_account",
+  "allowed_senders",
+  "subject_pattern",
+  "column_break_email",
+  "store_pattern",
+  "client_id_pattern",
+  "client_secret_pattern",
+  "email_safety_section",
+  "require_approval",
+  "redact_credential_email",
+  "column_break_safety",
+  "notify_role",
+  "request_section",
+  "zithara_contact_email",
+  "request_email_template",
+  "column_break_request",
+  "request_credentials_automatically"
+ ],
+ "fields": [
+  {
+   "fieldname": "connection_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connection"
+  },
+  {
+   "default": "0",
+   "description": "Send sales to Zithara",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled"
+  },
+  {
+   "default": "Sandbox",
+   "fieldname": "environment",
+   "fieldtype": "Select",
+   "label": "Environment",
+   "options": "Sandbox\nProduction"
+  },
+  {
+   "default": "https://dev-pos-api.zithara.com",
+   "depends_on": "eval:!doc.test_mode",
+   "fieldname": "base_url",
+   "fieldtype": "Data",
+   "label": "Base URL",
+   "mandatory_depends_on": "eval:doc.enabled && !doc.test_mode"
+  },
+  {
+   "default": "0",
+   "description": "Fake Zithara replies: nothing is sent and no credentials are checked. For demos and testing only.",
+   "fieldname": "test_mode",
+   "fieldtype": "Check",
+   "label": "Test Mode"
+  },
+  {
+   "fieldname": "column_break_conn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "30",
+   "fieldname": "timeout_seconds",
+   "fieldtype": "Int",
+   "label": "Timeout (Seconds)",
+   "non_negative": 1
+  },
+  {
+   "default": "2",
+   "description": "Retries for Zithara server errors (5xx) within one attempt",
+   "fieldname": "max_retries",
+   "fieldtype": "Int",
+   "label": "Retries per Call",
+   "non_negative": 1
+  },
+  {
+   "default": "5",
+   "description": "Failed syncs are retried hourly until this many attempts. 0 = no automatic retry.",
+   "fieldname": "max_sync_attempts",
+   "fieldtype": "Int",
+   "label": "Automatic Retry Attempts",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "store_section",
+   "fieldtype": "Section Break",
+   "label": "Stores"
+  },
+  {
+   "default": "POS Profile",
+   "description": "The ERPNext record that represents a store, e.g. POS Profile, Branch, Warehouse, Company",
+   "fieldname": "store_doctype",
+   "fieldtype": "Link",
+   "label": "Store DocType",
+   "options": "DocType",
+   "reqd": 1
+  },
+  {
+   "default": "pos_profile",
+   "description": "Field on Sales Invoice / POS Invoice that holds the store, e.g. pos_profile",
+   "fieldname": "invoice_store_field",
+   "fieldtype": "Data",
+   "label": "Invoice Store Field",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_store",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Used when an invoice has no store (single-store setups)",
+   "fieldname": "default_store",
+   "fieldtype": "Link",
+   "label": "Default Store",
+   "options": "Zithara Store"
+  },
+  {
+   "fieldname": "sync_section",
+   "fieldtype": "Section Break",
+   "label": "What to Send"
+  },
+  {
+   "default": "1",
+   "fieldname": "sync_sales_invoice",
+   "fieldtype": "Check",
+   "label": "Sales Invoice"
+  },
+  {
+   "default": "1",
+   "fieldname": "sync_pos_invoice",
+   "fieldtype": "Check",
+   "label": "POS Invoice"
+  },
+  {
+   "fieldname": "column_break_sync",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "e.g. the walk-in customer",
+   "fieldname": "skip_customers",
+   "fieldtype": "Table MultiSelect",
+   "label": "Skip Customers",
+   "options": "Zithara Skipped Customer"
+  },
+  {
+   "fieldname": "customer_section",
+   "fieldtype": "Section Break",
+   "label": "Customer Details"
+  },
+  {
+   "default": "91",
+   "description": "Added to 10-digit mobile numbers",
+   "fieldname": "phone_country_code",
+   "fieldtype": "Data",
+   "label": "Phone Country Code"
+  },
+  {
+   "fieldname": "column_break_customer",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "gender",
+   "description": "Customer field sent as gender",
+   "fieldname": "gender_field",
+   "fieldtype": "Data",
+   "label": "Gender Field"
+  },
+  {
+   "description": "Customer field sent as date of birth (optional)",
+   "fieldname": "date_of_birth_field",
+   "fieldtype": "Data",
+   "label": "Date of Birth Field"
+  },
+  {
+   "fieldname": "loyalty_section",
+   "fieldtype": "Section Break",
+   "label": "Loyalty Points"
+  },
+  {
+   "fieldname": "enable_loyalty_redemption",
+   "fieldtype": "Check",
+   "label": "Enable Points Redemption",
+   "default": "0",
+   "description": "Show Zithara \u2192 Loyalty Points / Redeem Points on invoices and allow the loyalty APIs. Leave off if the client only uses Zithara as a CRM; paid sales are still sent either way."
+  },
+  {
+   "fieldname": "credentials_tab",
+   "fieldtype": "Tab Break",
+   "label": "Store Credentials"
+  },
+  {
+   "description": "Zithara emails a client id and secret for every new store. When enabled, those emails are read automatically, the credentials are checked with Zithara and saved on the Zithara Store.",
+   "fieldname": "email_import_section",
+   "fieldtype": "Section Break",
+   "label": "Read Credentials from Zithara's Email"
+  },
+  {
+   "default": "0",
+   "fieldname": "import_credentials_from_email",
+   "fieldtype": "Check",
+   "label": "Enabled"
+  },
+  {
+   "depends_on": "import_credentials_from_email",
+   "description": "Inbox that receives Zithara's emails. Leave empty to accept any incoming account.",
+   "fieldname": "credential_email_account",
+   "fieldtype": "Link",
+   "label": "Email Account",
+   "options": "Email Account"
+  },
+  {
+   "depends_on": "import_credentials_from_email",
+   "description": "One per line: full address or domain, e.g. @zithara.com",
+   "fieldname": "allowed_senders",
+   "fieldtype": "Small Text",
+   "label": "Allowed Senders",
+   "mandatory_depends_on": "import_credentials_from_email"
+  },
+  {
+   "depends_on": "import_credentials_from_email",
+   "description": "Optional regular expression the subject must match",
+   "fieldname": "subject_pattern",
+   "fieldtype": "Data",
+   "label": "Subject Pattern"
+  },
+  {
+   "fieldname": "column_break_email",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "(?im)^\\s*store(?:\\s*(?:id|code|name))?\\s*[:=-]\\s*(.+?)\\s*$",
+   "depends_on": "import_credentials_from_email",
+   "description": "Regular expression; group 1 = store code, Zithara store id or name. Not needed for replies to a credential request.",
+   "fieldname": "store_pattern",
+   "fieldtype": "Data",
+   "label": "Store Pattern"
+  },
+  {
+   "default": "(?i)client[\\s_-]*id\\s*[:=-]\\s*(\\S+)",
+   "depends_on": "import_credentials_from_email",
+   "fieldname": "client_id_pattern",
+   "fieldtype": "Data",
+   "label": "Client ID Pattern",
+   "mandatory_depends_on": "import_credentials_from_email"
+  },
+  {
+   "default": "(?i)(?:client[\\s_-]*)?secret(?:[\\s_-]*key)?\\s*[:=-]\\s*(\\S+)",
+   "depends_on": "import_credentials_from_email",
+   "fieldname": "client_secret_pattern",
+   "fieldtype": "Data",
+   "label": "Client Secret Pattern",
+   "mandatory_depends_on": "import_credentials_from_email"
+  },
+  {
+   "depends_on": "import_credentials_from_email",
+   "fieldname": "email_safety_section",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "1",
+   "description": "Checked credentials wait for an admin to approve before the store goes live",
+   "fieldname": "require_approval",
+   "fieldtype": "Check",
+   "label": "Require Approval"
+  },
+  {
+   "default": "1",
+   "description": "Blank out the secret in the saved email once it is stored securely",
+   "fieldname": "redact_credential_email",
+   "fieldtype": "Check",
+   "label": "Remove Secret from Email"
+  },
+  {
+   "fieldname": "column_break_safety",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "System Manager",
+   "fieldname": "notify_role",
+   "fieldtype": "Link",
+   "label": "Notify Role",
+   "options": "Role"
+  },
+  {
+   "description": "Email Zithara for a new store's credentials. Their reply is read automatically when the section above is enabled.",
+   "fieldname": "request_section",
+   "fieldtype": "Section Break",
+   "label": "Request Credentials from Zithara"
+  },
+  {
+   "fieldname": "zithara_contact_email",
+   "fieldtype": "Data",
+   "label": "Zithara Contact Email",
+   "options": "Email"
+  },
+  {
+   "description": "Optional. The Zithara Store is available as doc.",
+   "fieldname": "request_email_template",
+   "fieldtype": "Link",
+   "label": "Email Template",
+   "options": "Email Template"
+  },
+  {
+   "fieldname": "column_break_request",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "description": "When a new record of the Store DocType is created, create its Zithara Store and email the request",
+   "fieldname": "request_credentials_automatically",
+   "fieldtype": "Check",
+   "label": "Request for New Stores Automatically"
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-10-01 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Zithara Core",
+ "name": "Zithara Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

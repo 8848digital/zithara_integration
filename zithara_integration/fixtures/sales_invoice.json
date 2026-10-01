@@ -1,0 +1,52 @@
+[
+ {
+  "depends_on": "eval:doc.zithara_redemption",
+  "doctype": "Custom Field",
+  "dt": "Sales Invoice",
+  "fieldname": "zithara_redemption",
+  "fieldtype": "Link",
+  "insert_after": "discount_amount",
+  "is_system_generated": 1,
+  "label": "Zithara Redemption",
+  "modified": "2026-09-30 18:01:02.238829",
+  "module": "Zithara Core",
+  "name": "Sales Invoice-zithara_redemption",
+  "no_copy": 1,
+  "options": "Zithara Redemption",
+  "print_hide": 1,
+  "read_only": 1
+ },
+ {
+  "depends_on": "eval:doc.zithara_redemption",
+  "doctype": "Custom Field",
+  "dt": "Sales Invoice",
+  "fieldname": "zithara_redeemed_points",
+  "fieldtype": "Int",
+  "insert_after": "zithara_redemption",
+  "is_system_generated": 1,
+  "label": "Zithara Redeemed Points",
+  "modified": "2026-09-30 18:01:03.416615",
+  "module": "Zithara Core",
+  "name": "Sales Invoice-zithara_redeemed_points",
+  "no_copy": 1,
+  "print_hide": 1,
+  "read_only": 1
+ },
+ {
+  "depends_on": "eval:doc.zithara_redemption",
+  "doctype": "Custom Field",
+  "dt": "Sales Invoice",
+  "fieldname": "zithara_redeemed_amount",
+  "fieldtype": "Currency",
+  "insert_after": "zithara_redeemed_points",
+  "is_system_generated": 1,
+  "label": "Zithara Redeemed Amount",
+  "modified": "2026-09-30 18:01:03.624989",
+  "module": "Zithara Core",
+  "name": "Sales Invoice-zithara_redeemed_amount",
+  "no_copy": 1,
+  "options": "currency",
+  "print_hide": 1,
+  "read_only": 1
+ }
+]

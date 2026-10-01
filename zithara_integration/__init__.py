@@ -3,4 +3,4 @@
 # of this file, via any medium, is strictly prohibited without prior
 # written permission from 8848 Digital LLP.
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

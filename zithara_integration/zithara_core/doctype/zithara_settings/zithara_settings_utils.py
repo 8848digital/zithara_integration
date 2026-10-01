@@ -6,6 +6,7 @@
 """Validation for Zithara Settings."""
 
 import re
+from urllib.parse import urlparse
 
 import frappe
 from frappe import _
@@ -17,6 +18,7 @@ BASE_URLS = {
 PATTERN_FIELDS = ("subject_pattern", "store_pattern", "client_id_pattern", "client_secret_pattern")
 # The subject rule only has to match; the others must capture the value in group 1.
 CAPTURE_FIELDS = ("store_pattern", "client_id_pattern", "client_secret_pattern")
+LOCAL_HOSTS = ("localhost", "127.0.0.1")
 INVOICE_DOCTYPES = ("Sales Invoice", "POS Invoice")
 
 
@@ -48,8 +50,23 @@ def __set_base_url(doc) -> None:
 	if not doc.base_url or doc.base_url.rstrip("/") in BASE_URLS.values():
 		doc.base_url = BASE_URLS.get(doc.environment, BASE_URLS["Sandbox"])
 	doc.base_url = doc.base_url.rstrip("/")
-	if not doc.base_url.startswith("https://") and not doc.test_mode:
-		frappe.throw(_("Base URL must start with https://"))
+	if doc.base_url.startswith("https://") or doc.test_mode or __is_local_mock(doc.base_url):
+		return
+	frappe.throw(_("Base URL must start with https://"))
+
+
+def __is_local_mock(base_url: str) -> bool:
+	"""
+	Allow a plain-http local mock Zithara (scripts/mock_zithara) in developer mode only.
+
+	Parameters:
+	        base_url (str, required): Base URL entered in the settings.
+
+	Returns:
+	        bool: True for http://localhost or http://127.0.0.1 on a developer-mode site.
+	"""
+	host = urlparse(base_url).hostname
+	return bool(frappe.conf.developer_mode) and base_url.startswith("http://") and host in LOCAL_HOSTS
 
 
 def __validate_store_mapping(doc) -> None:

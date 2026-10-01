@@ -12,7 +12,8 @@ written permission from 8848 Digital LLP.
 ### Overview
 Sends every paid sale (customer, items, totals, payments) to Zithara's POS API
 and cancels it there when the sale is returned or cancelled. Zithara awards
-and tracks loyalty points in its own CRM.
+and tracks loyalty points in its own CRM; points can be redeemed on an invoice
+with an OTP Zithara texts to the customer.
 
 Every store is a separate Zithara merchant with its **own client id and
 secret**. Zithara issues them by email when a store is opened.
@@ -33,7 +34,7 @@ secret**. Zithara issues them by email when a store is opened.
 | ----- | ---- | --------- | ----- |
 | Enabled | Check | — | Master switch. |
 | Environment | Select | — | Sandbox / Production; switches the Base URL. |
-| Base URL | Data | Yes (when enabled) | Filled from the environment; can be overridden. |
+| Base URL | Data | Yes (when enabled) | Filled from the environment; can be overridden. Must be https (plain http only for a localhost mock on a developer-mode site). |
 | Test Mode | Check | — | Fake Zithara replies; nothing is sent. Demos/testing only. |
 | Timeout (Seconds) | Int | — | Default 30. |
 | Retries per Call | Int | — | Default 2. Only Zithara 5xx answers are retried. |
@@ -74,6 +75,13 @@ None.
 2. Zithara Store → store code, link the POS Profile, Client ID + Secret → Save → **Test Connection** → Active.
 3. Submit a POS Invoice / paid Sales Invoice → a Zithara Sync Log appears with status Success.
 4. Return one item → a Cancel Order log (partial) appears.
-5. Credential email: enable reading, send a test email from an allowed sender with
+5. Loyalty: save a draft invoice for a customer with a mobile number → **Zithara → Redeem Points**
+   → points → **Send OTP** → enter the OTP → the discount is applied and a Zithara Redemption
+   (Redeemed) is created. Test Mode and the local mock accept OTP `123456`.
+6. Credential email: enable reading, send a test email from an allowed sender with
    `Store Code: <code>`, `Client ID: ...`, `Client Secret: ...` → the store becomes
    Pending Approval → **Approve**.
+
+**Without Zithara credentials:** run the local mock (`python3 scripts/mock_zithara/server.py`)
+and set Base URL to `http://127.0.0.1:9099` on a developer-mode site; see
+[scripts/mock_zithara/README.md](scripts/mock_zithara/README.md).

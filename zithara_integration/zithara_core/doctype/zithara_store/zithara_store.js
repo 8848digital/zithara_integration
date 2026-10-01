@@ -58,5 +58,6 @@ function callStoreApi(frm, method) {
 			});
 			frm.reload_doc();
 		},
+		error: zithara_integration.show_call_error,
 	});
 }

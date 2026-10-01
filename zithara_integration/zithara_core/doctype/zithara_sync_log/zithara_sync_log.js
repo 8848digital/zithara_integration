@@ -40,6 +40,7 @@ function retrySync(frm) {
 			frappe.show_alert({ message: r.message, indicator: r.status ? "green" : "red" });
 			frm.reload_doc();
 		},
+		error: zithara_integration.show_call_error,
 	});
 }
 
@@ -65,5 +66,6 @@ function checkOrder(frm) {
 					: "",
 			});
 		},
+		error: zithara_integration.show_call_error,
 	});
 }
